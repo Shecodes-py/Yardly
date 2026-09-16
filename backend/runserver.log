@@ -1,0 +1,74 @@
+Watching for file changes with StatReloader
+[14/Sep/2026 19:53:10] "GET /admin/login/ HTTP/1.1" 200 4303
+Unauthorized: /api/me/
+[14/Sep/2026 19:53:18] "GET /api/me/ HTTP/1.1" 401 51
+Unauthorized: /api/me/
+[14/Sep/2026 19:53:18] "GET /api/me/ HTTP/1.1" 401 51
+[14/Sep/2026 19:53:18] "OPTIONS /api/auth/refresh/ HTTP/1.1" 200 0
+Internal Server Error: /api/auth/refresh/
+Traceback (most recent call last):
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\django\core\handlers\base.py", line 199, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\django\views\decorators\csrf.py", line 64, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\rest_framework\views.py", line 526, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\rest_framework\views.py", line 474, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\rest_framework\views.py", line 485, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\rest_framework_simplejwt\views.py", line 46, in post
+    serializer.is_valid(raise_exception=True)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\rest_framework\serializers.py", line 225, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\rest_framework\serializers.py", line 459, in run_validation
+    value = self.validate(value)
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\rest_framework_simplejwt\serializers.py", line 116, in validate
+    user := get_user_model().objects.get(
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        **{api_settings.USER_ID_FIELD: user_id}
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Documents\Peace\Yardly\backend\venv\Lib\site-packages\django\db\models\query.py", line 722, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+apps.users.models.User.DoesNotExist: User matching query does not exist.
+[14/Sep/2026 19:53:18] "POST /api/auth/refresh/ HTTP/1.1" 500 21956
+[14/Sep/2026 19:54:48] "POST /api/auth/register/ HTTP/1.1" 201 902
+[14/Sep/2026 19:54:48] "GET /api/categories/ HTTP/1.1" 200 900
+[14/Sep/2026 19:54:48] "GET /api/jobs/ HTTP/1.1" 200 52
+[14/Sep/2026 19:54:48] "GET /api/categories/ HTTP/1.1" 200 900
+[14/Sep/2026 19:54:48] "GET /api/jobs/ HTTP/1.1" 200 52
+[14/Sep/2026 19:54:52] "OPTIONS /api/jobs/?category=3 HTTP/1.1" 200 0
+[14/Sep/2026 19:54:52] "GET /api/jobs/?category=3 HTTP/1.1" 200 52
+[14/Sep/2026 19:54:53] "OPTIONS /api/jobs/?category=2 HTTP/1.1" 200 0
+[14/Sep/2026 19:54:53] "GET /api/jobs/?category=2 HTTP/1.1" 200 52
+[14/Sep/2026 19:54:54] "OPTIONS /api/my-jobs/ HTTP/1.1" 200 0
+[14/Sep/2026 19:54:54] "OPTIONS /api/my-jobs/ HTTP/1.1" 200 0
+[14/Sep/2026 19:54:54] "GET /api/my-jobs/ HTTP/1.1" 200 52
+[14/Sep/2026 19:54:54] "GET /api/my-jobs/ HTTP/1.1" 200 52
+[14/Sep/2026 19:54:55] "OPTIONS /api/notifications/ HTTP/1.1" 200 0
+[14/Sep/2026 19:54:55] "OPTIONS /api/notifications/ HTTP/1.1" 200 0
+[14/Sep/2026 19:54:55] "GET /api/notifications/ HTTP/1.1" 200 52
+[14/Sep/2026 19:54:55] "GET /api/notifications/ HTTP/1.1" 200 52
+[14/Sep/2026 19:54:59] "GET /api/jobs/ HTTP/1.1" 200 52
+[14/Sep/2026 19:54:59] "GET /api/categories/ HTTP/1.1" 200 900
+[14/Sep/2026 19:54:59] "GET /api/jobs/ HTTP/1.1" 200 52
+[14/Sep/2026 19:54:59] "GET /api/categories/ HTTP/1.1" 200 900
+[14/Sep/2026 19:55:01] "GET /api/categories/ HTTP/1.1" 200 900
+[14/Sep/2026 19:55:01] "GET /api/categories/ HTTP/1.1" 200 900

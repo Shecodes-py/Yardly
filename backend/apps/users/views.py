@@ -1,10 +1,13 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import render
 
 from .models import User
 from .serializers import RegisterSerializer, UserSerializer
 
+def index(request):
+    return render(request, 'index.html')
 
 class RegisterView(generics.CreateAPIView):
     """Creates the account, enrolls the user in the estate tied to the

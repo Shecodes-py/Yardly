@@ -99,6 +99,8 @@ The admin access-code screen loads the current estate invite code. **Save estate
 
 Backend logs rotate in `backend/logs/yardly.log` (5 MB each, five backups). JSON records identify the app/logger, timestamp, severity, route, request ID, status, user ID and duration. Validation failures include field names; unhandled errors include tracebacks. Email records identify message type, user ID and delivery outcome. Passwords, JWTs, email bodies and request payloads are not logged.
 
+JSON logs also write to the process console, where your backend hosting provider captures them. With `DEBUG=False`, logging defaults to console only so production does not require writable log files. Use `LOG_LEVEL=INFO`; set `LOG_TO_FILE=True` only when the deployment has writable persistent storage. Keep `DEBUG=False`, configure your production `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` and `FRONTEND_URL`, and use a production WSGI/ASGI server before deploying.
+
 Frontend API, rendering, runtime and rejected-promise errors appear in the browser console under `[Yardly]`. Authenticated client error metadata is also recorded by the backend. API responses include `X-Request-ID` to correlate browser failures with server records. Captured emails and logs are ignored by Git; reset codes in captured emails should remain private.
 
 Regression checks: `python manage.py test apps.users apps.estates --noinput`.
@@ -108,3 +110,13 @@ Regression checks: `python manage.py test apps.users apps.estates --noinput`.
 Set `DATABASE_URL` in `backend/.env` to the Neon PostgreSQL connection string with `sslmode=require`. Django reads this file directly; a Neon management API key is not a database password. Run `python manage.py migrate` to initialize the schema. Changing databases does not automatically copy accounts or estate records from local SQLite.
 
 The React app includes `@vercel/analytics/react` in production builds. Query strings and fragments are removed before page-view events are sent; legacy password-reset token URLs are excluded. Enable Web Analytics for the Vercel project and deploy the frontend to start collecting visits. Local Vite development does not send analytics. Live collection must be verified on the deployed site.
+
+For Vercel Git deployments, select `frontend` as the root directory, Vite as the framework, `npm run build` as the build command and `dist` as the output directory. Configure `VITE_API_BASE_URL=https://YOUR-BACKEND/api` before building. The backend needs the Vercel origin in `CORS_ALLOWED_ORIGINS` and the frontend URL in `FRONTEND_URL` so email links work. `frontend/vercel.json` enables direct links to React routes. Local environment files are excluded from CLI uploads; database and Resend credentials belong only on the backend.
+
+## Render backend deployment
+
+Create a Render Blueprint from this repository using `render.yaml`. Supply the existing Neon `DATABASE_URL` and `RESEND_API_KEY` in Render's environment settings. The blueprint configures Python 3.14.3, Gunicorn, WhiteNoise, migrations, HTTPS proxy handling, the Vercel origin, and console logs. It uses a free web service for initial review. Uploaded media needs persistent or external storage before relying on uploads in production.
+
+For manual setup, select `backend` as Root Directory, `bash build.sh` as Build Command, and `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --error-logfile -` as Start Command. Health check: `/api/health/`. Copy the environment settings from `render.yaml`, including a new random `SECRET_KEY` and `DEBUG=False`.
+
+Once Render supplies the public backend URL, set Vercel's `VITE_API_BASE_URL` to `https://YOUR-SERVICE.onrender.com/api` and redeploy the frontend. Check sign-in, password reset, announcements, and API response request IDs on the deployed app.

@@ -7,6 +7,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Retire offline caches while production deployments are being stabilized.
+      selfDestroying: true,
       includeAssets: ['icons/apple-touch-icon.png'],
       manifest: {
         name: 'Yardly',

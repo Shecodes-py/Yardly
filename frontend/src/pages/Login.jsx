@@ -16,9 +16,14 @@ export default function Login() {
     setSubmitting(true)
     try {
       await login(email, password)
-      navigate('/home')
-    } catch {
-      setError('Incorrect email or password.')
+      navigate('/dashboard')
+    } catch (err) {
+      const status = err.response?.status
+      setError(status === 401 ? 'Incorrect email or password.'
+        : status === 429 ? 'Too many sign-in attempts. Please wait and try again.'
+          : status >= 500 ? 'Yardly is temporarily unavailable. Please try again shortly.'
+            : !err.response ? 'Could not connect to Yardly. Please try again shortly.'
+              : 'Could not sign in. Please try again.')
     } finally {
       setSubmitting(false)
     }

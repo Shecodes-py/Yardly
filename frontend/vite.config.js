@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react'
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -9,6 +10,21 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      name: 'yardly-production-styles',
+      transformIndexHtml: {
+        order: 'post',
+        handler(html, context) {
+          if (context.server) return html
+          // Keep the same independent source styles as development. Embedding
+          // them prevents failed asset requests from leaving the page unstyled.
+          const styles = ['src/index.css', 'src/dashboard.css', 'src/pages/Landing.css']
+            .map(path => `<style data-yardly-style="${path}">${readFileSync(new URL(path, import.meta.url), 'utf8')}</style>`)
+            .join('\n')
+          return html.replace(/<link\b[^>]*rel="stylesheet"[^>]*>/g, '').replace('</head>', `${styles}\n</head>`)
+        },
+      },
+    },
     VitePWA({
       registerType: 'autoUpdate',
       // Retire offline caches while production deployments are being stabilized.

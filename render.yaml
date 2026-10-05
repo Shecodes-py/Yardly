@@ -21,9 +21,9 @@ services:
       - key: DEFAULT_FROM_EMAIL
         value: Yardly <noreply@shecodes.site>
       - key: FRONTEND_URL
-        value: https://yardly-tau.vercel.app
+        value: https://yardly-alpha.vercel.app
       - key: CORS_ALLOWED_ORIGINS
-        value: https://yardly-tau.vercel.app
+        value: https://yardly-alpha.vercel.app,https://yardly-tau.vercel.app
       - key: LOG_LEVEL
         value: INFO
       - key: LOG_TO_FILE

@@ -3,6 +3,10 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  build: {
+    // Preserve source CSS while diagnosing production browser differences.
+    cssMinify: false,
+  },
   plugins: [
     react(),
     VitePWA({

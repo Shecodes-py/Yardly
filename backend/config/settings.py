@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "apps.common.observability.RequestLoggingMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -120,6 +121,19 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+}
+
+if config('RENDER', default=False, cast=bool):
+    render_host = config('RENDER_EXTERNAL_HOSTNAME', default='')
+    if render_host and render_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(render_host)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -188,18 +202,25 @@ SIMPLE_JWT["CHECK_REVOKE_TOKEN"] = True
 CORS_EXPOSE_HEADERS = ["X-Request-ID"]
 
 LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(exist_ok=True)
+LOG_TO_FILE = config('LOG_TO_FILE', default=DEBUG, cast=bool)
+LOG_LEVEL = config('LOG_LEVEL', default='INFO')
+if LOG_TO_FILE:
+    LOG_DIR.mkdir(exist_ok=True)
 LOGGING = {
     "version": 1, "disable_existing_loggers": False,
     "formatters": {"json": {"()": "apps.common.observability.JsonFormatter"}},
     "handlers": {
         "console": {"class": "logging.StreamHandler", "formatter": "json"},
-        "file": {"class": "logging.handlers.RotatingFileHandler", "filename": str(LOG_DIR / "yardly.log"),
-                 "maxBytes": 5 * 1024 * 1024, "backupCount": 5, "encoding": "utf-8", "formatter": "json"},
     },
     "loggers": {
-        "yardly": {"handlers": ["console", "file"], "level": "INFO", "propagate": False},
-        "django.request": {"handlers": ["console", "file"], "level": "ERROR", "propagate": False},
-        "apps": {"handlers": ["console", "file"], "level": "INFO", "propagate": False},
+        "yardly": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
+        "apps": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
     },
 }
+if LOG_TO_FILE:
+    LOGGING['handlers']['file'] = {
+        'class': 'logging.handlers.RotatingFileHandler', 'filename': str(LOG_DIR / 'yardly.log'),
+        'maxBytes': 5 * 1024 * 1024, 'backupCount': 5, 'encoding': 'utf-8', 'formatter': 'json'}
+    for logger in LOGGING['loggers'].values():
+        logger['handlers'].append('file')

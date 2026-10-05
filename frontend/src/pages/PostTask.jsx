@@ -121,7 +121,7 @@ export default function PostTask() {
             <input
               id="approximate_location"
               required
-              placeholder="e.g. Chevron Estate — Zone B"
+              placeholder="e.g. Miracle Zone Estate — Zone B"
               value={form.approximate_location}
               onChange={update('approximate_location')}
             />

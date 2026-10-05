@@ -3,7 +3,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from apps.users.views import index 
+from apps.common.client_errors import ClientErrorView
+from apps.users.views import health_check
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
@@ -12,8 +13,10 @@ urlpatterns = [
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
-    path("", index, name="index"),
+    path("api/client-errors/", ClientErrorView.as_view(), name="client-errors"),
+    path("api/health/", health_check, name="health-check"),
     path("admin/", admin.site.urls),
+
     path("api/auth/login/", TokenObtainPairView.as_view(), name="token-obtain-pair"),
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     path("api/", include("apps.users.urls")),
@@ -23,7 +26,11 @@ urlpatterns = [
     path("api/", include("apps.reviews.urls")),
     path("api/", include("apps.notifications.urls")),
     path("api/", include("apps.reports.urls")),
+    path("api/", include("apps.gate.urls")),
+    path("api/", include("apps.community.urls")),
+    path("api/", include("apps.businesses.urls")),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

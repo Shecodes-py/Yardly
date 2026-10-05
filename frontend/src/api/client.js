@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { logClientError } from '../logging'
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'
 
@@ -31,6 +32,7 @@ let refreshPromise = null
 client.interceptors.response.use(
   (response) => response,
   async (error) => {
+    logClientError('api', { name: error.code || error.name, status: error.response?.status, request_id: error.response?.headers?.['x-request-id'] })
     const { config, response } = error
     if (response?.status === 401 && !config._retried && tokenStore.getRefresh()) {
       config._retried = true

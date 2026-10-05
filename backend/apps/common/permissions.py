@@ -23,3 +23,12 @@ def get_verified_estate_id(user):
         user.estate_memberships.filter(verification_status="VERIFIED").first()
     )
     return membership.estate_id if membership else None
+
+
+class IsEstateAdmin(BasePermission):
+    message = "Only a verified estate administrator can perform this action."
+
+    def has_permission(self, request, view):
+        user = request.user
+        return bool(user and user.is_authenticated and user.status == User.Status.VERIFIED
+                    and user.is_estate_admin and get_verified_estate_id(user))

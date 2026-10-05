@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
 
     # Yardly apps
+    "apps.common",
     "apps.users",
     "apps.estates",
     "apps.jobs",
@@ -44,10 +45,15 @@ INSTALLED_APPS = [
     "apps.reviews",
     "apps.notifications",
     "apps.reports",
+    "apps.gate",
+    "apps.community",
+    "apps.businesses",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "apps.common.observability.RequestLoggingMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -84,9 +90,10 @@ WSGI_APPLICATION = "config.wsgi.application"
 import dj_database_url  # noqa: E402
 
 DATABASES = {
-    "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    "default": dj_database_url.parse(
+        config('DATABASE_URL', default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
         conn_max_age=600,
+        conn_health_checks=True,
     )
 }
 
@@ -129,6 +136,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
+    "EXCEPTION_HANDLER": "apps.common.observability.exception_handler",
+    "DEFAULT_THROTTLE_RATES": {"password_reset": "5/hour", "password_reset_confirm": "20/hour", "client_errors": "60/minute"},
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
     "DEFAULT_FILTER_BACKENDS": (
@@ -161,3 +170,36 @@ CORS_ALLOWED_ORIGINS = config(
     cast=Csv(),
 )
 CORS_ALLOW_CREDENTIALS = True
+
+# Transactional email: files locally, SMTP when configured for deployment.
+FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173").rstrip("/")
+RESEND_API_KEY = config("RESEND_API_KEY", default="")
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="apps.common.resend_backend.EmailBackend" if RESEND_API_KEY or not DEBUG else "django.core.mail.backends.filebased.EmailBackend")
+EMAIL_FILE_PATH = BASE_DIR / "emails"
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Yardly <noreply@yardly.local>")
+EMAIL_HOST = config("EMAIL_HOST", default="localhost")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_TIMEOUT = 10
+PASSWORD_RESET_TIMEOUT = 3600
+SIMPLE_JWT["CHECK_REVOKE_TOKEN"] = True
+CORS_EXPOSE_HEADERS = ["X-Request-ID"]
+
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+LOGGING = {
+    "version": 1, "disable_existing_loggers": False,
+    "formatters": {"json": {"()": "apps.common.observability.JsonFormatter"}},
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "json"},
+        "file": {"class": "logging.handlers.RotatingFileHandler", "filename": str(LOG_DIR / "yardly.log"),
+                 "maxBytes": 5 * 1024 * 1024, "backupCount": 5, "encoding": "utf-8", "formatter": "json"},
+    },
+    "loggers": {
+        "yardly": {"handlers": ["console", "file"], "level": "INFO", "propagate": False},
+        "django.request": {"handlers": ["console", "file"], "level": "ERROR", "propagate": False},
+        "apps": {"handlers": ["console", "file"], "level": "INFO", "propagate": False},
+    },
+}

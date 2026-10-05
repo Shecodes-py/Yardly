@@ -1,26 +1,7 @@
 import { NavLink } from 'react-router-dom'
-
-const items = [
-  { to: '/home', icon: '🏠', label: 'Home' },
-  { to: '/my-tasks', icon: '📋', label: 'My Tasks' },
-  { to: '/post-task', icon: '➕', label: 'Post', isFab: true },
-  { to: '/notifications', icon: '🔔', label: 'Activity' },
-  { to: '/profile', icon: '👤', label: 'Profile' },
-]
+import Icon from './Icon'
+import { residentNav } from './residentNav'
 
 export default function BottomNav() {
-  return (
-    <nav className="bottom-nav">
-      {items.map((item) => (
-        <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? 'active' : '')}>
-          {item.isFab ? (
-            <span className="fab">{item.icon}</span>
-          ) : (
-            <span className="nav-icon">{item.icon}</span>
-          )}
-          <span>{item.label}</span>
-        </NavLink>
-      ))}
-    </nav>
-  )
+  return <nav className="bottom-nav" aria-label="Mobile navigation">{residentNav.map(item => <NavLink key={item.to} to={item.to} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}><Icon name={item.name} size={23} /><span className="nav-label">{item.label}</span></NavLink>)}</nav>
 }

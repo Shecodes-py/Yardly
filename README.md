@@ -81,3 +81,30 @@ Per the product spec: in-app messaging (WhatsApp deep link is used instead),
 escrow/integrated payments, AI matching, live GPS tracking, multi-estate discovery,
 and automated dispute arbitration. See the product brief for the full list and the
 phased build order.
+
+
+## Account email and password reset
+
+The sign-in page links to `/forgot-password`. Password reset emails contain a six-digit code that expires after 10 minutes. Codes are stored as hashes, used once, and locked after five incorrect attempts. Requesting a new code invalidates the previous code. A successful reset invalidates previously issued JWTs. Registration sends a welcome email. Estate admins can check **Email this update to verified residents** when publishing an announcement; each recipient receives a separate message and delivery counts are displayed.
+
+Run `python manage.py preview_emails` to generate browser previews at `/email-previews/welcome.html` and `/email-previews/password-reset.html`. Add `--to YOUR_EMAIL` to send sample templates; sample OTPs do not reset an account.
+
+Local development uses Django's file email backend: captured messages are saved in `backend/emails/`. They are not delivered to real inboxes. For Resend, add `RESEND_API_KEY` and a verified `DEFAULT_FROM_EMAIL` to `backend/.env`; the Resend backend is selected automatically when a key exists. If `EMAIL_BACKEND` is explicitly set, use `apps.common.resend_backend.EmailBackend`. Resend acceptance is logged with its message ID; actual inbox delivery is not confirmed by API acceptance. Alternatively, configure `EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`, `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, and a verified `DEFAULT_FROM_EMAIL` for real delivery. Set `FRONTEND_URL` to the deployed frontend so email links point to the correct site. Environment variable examples are in `backend/.env.example`. Delivery is synchronous; failures are logged and registration or a published announcement remains saved.
+
+## Access codes
+
+The admin access-code screen loads the current estate invite code. **Save estate invite code** changes onboarding invitations only; **Rotate gate code** changes the daily entry code only. Codes persist after reload. Both operations require a verified admin membership in the estate.
+
+## Error logs
+
+Backend logs rotate in `backend/logs/yardly.log` (5 MB each, five backups). JSON records identify the app/logger, timestamp, severity, route, request ID, status, user ID and duration. Validation failures include field names; unhandled errors include tracebacks. Email records identify message type, user ID and delivery outcome. Passwords, JWTs, email bodies and request payloads are not logged.
+
+Frontend API, rendering, runtime and rejected-promise errors appear in the browser console under `[Yardly]`. Authenticated client error metadata is also recorded by the backend. API responses include `X-Request-ID` to correlate browser failures with server records. Captured emails and logs are ignored by Git; reset codes in captured emails should remain private.
+
+Regression checks: `python manage.py test apps.users apps.estates --noinput`.
+
+## Neon database and Vercel Analytics
+
+Set `DATABASE_URL` in `backend/.env` to the Neon PostgreSQL connection string with `sslmode=require`. Django reads this file directly; a Neon management API key is not a database password. Run `python manage.py migrate` to initialize the schema. Changing databases does not automatically copy accounts or estate records from local SQLite.
+
+The React app includes `@vercel/analytics/react` in production builds. Query strings and fragments are removed before page-view events are sent; legacy password-reset token URLs are excluded. Enable Web Analytics for the Vercel project and deploy the frontend to start collecting visits. Local Vite development does not send analytics. Live collection must be verified on the deployed site.

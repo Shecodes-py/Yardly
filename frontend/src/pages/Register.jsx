@@ -9,6 +9,7 @@ const initialForm = {
   phone_number: '',
   password: '',
   invite_code: '',
+  role: 'RESIDENT',
 }
 
 export default function Register() {
@@ -26,7 +27,7 @@ export default function Register() {
     setSubmitting(true)
     try {
       await register(form)
-      navigate('/home')
+      navigate('/dashboard')
     } catch (err) {
       const data = err.response?.data
       const message = data ? Object.values(data).flat().join(' ') : 'Registration failed. Please try again.'
@@ -38,11 +39,57 @@ export default function Register() {
 
   return (
     <div className="center-page">
-      <h2>Join your estate</h2>
+      <h2>Join your neighbourhood</h2>
       <p className="muted" style={{ marginBottom: 16 }}>
-        You'll need the invite code from your estate management to join.
+        Select your account role and enter your estate invite code to register.
       </p>
+
       <form onSubmit={handleSubmit}>
+        {/* ROLE SELECTION CARDS */}
+        <div className="field">
+          <label>Select Your Account Role</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, marginBottom: 8 }}>
+            <button
+              type="button"
+              className={`btn ${form.role === 'RESIDENT' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '8px 4px', fontSize: 12, flexDirection: 'column' }}
+              onClick={() => setForm({ ...form, role: 'RESIDENT' })}
+            >
+              <span style={{ fontSize: 18 }}>👤</span>
+              <span>Resident</span>
+            </button>
+            <button
+              type="button"
+              className={`btn ${form.role === 'GATE_SECURITY' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '8px 4px', fontSize: 12, flexDirection: 'column' }}
+              onClick={() => setForm({ ...form, role: 'GATE_SECURITY' })}
+            >
+              <span style={{ fontSize: 18 }}>🛡️</span>
+              <span>Security</span>
+            </button>
+
+            <button
+              type="button"
+              className={`btn ${form.role === 'ESTATE_ADMIN' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '8px 4px', fontSize: 12, flexDirection: 'column' }}
+              onClick={() => setForm({ ...form, role: 'ESTATE_ADMIN' })}
+            >
+              <span style={{ fontSize: 18 }}>👑</span>
+              <span>Admin</span>
+            </button>
+          </div>
+          {form.role === 'GATE_SECURITY' && (
+            <p className="text-small muted" style={{ color: '#b45309' }}>
+              🔒 Security Guard accounts require Estate Admin approval before gate access is granted.
+            </p>
+          )}
+          {form.role === 'RESIDENT' && (
+            <p className="text-small muted" style={{ color: '#158052' }}>
+              📋 Residents complete a quick Household Audit after signup before unlocking gate access.
+            </p>
+          )}
+        </div>
+
         <div className="field">
           <label htmlFor="first_name">First name</label>
           <input id="first_name" required value={form.first_name} onChange={update('first_name')} />
@@ -61,7 +108,7 @@ export default function Register() {
             id="phone_number"
             type="tel"
             required
-            placeholder="+234..."
+            placeholder="08012345678"
             value={form.phone_number}
             onChange={update('phone_number')}
           />

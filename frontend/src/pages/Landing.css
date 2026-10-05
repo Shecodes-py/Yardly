@@ -1,0 +1,53 @@
+.landing { background: #f7f6ef; color: #22382b; }
+.landing-header { max-width: 1320px; margin: auto; height: 100px; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.landing-header > a { color: #244a35; }
+.landing-header nav { display: flex; gap: 34px; }
+.landing-header nav a { color: #586451; font-size: 13px; }
+.landing-login { display: flex; gap: 16px; align-items: center; border: 1px solid #b9c0ad; border-radius: 6px; padding: 12px 19px; font-size: 13px; }
+.landing-hero { max-width: 1320px; margin: auto; padding: 62px 48px 70px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 45px; }
+.landing-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #657456; }
+.landing-hero h1 { font-size: clamp(48px, 5.7vw, 78px); line-height: 1.06; letter-spacing: -3.7px; font-weight: 550; margin: 24px 0; }
+.landing-hero h1 em { font-family: Georgia, serif; font-weight: 400; color: #a45c3c; }
+.landing-hero > div > p { max-width: 420px; color: #68705f; font-size: 17px; line-height: 1.8; }
+.landing-actions { display: flex; align-items: center; gap: 25px; margin-top: 31px; }
+.landing-cta { display: inline-flex; align-items: center; justify-content: center; gap: 22px; padding: 17px 23px; background: #264c36; color: #fff; border-radius: 6px; font-size: 13px; font-weight: 550; }
+.landing-cta:hover { background: #355e42; }
+.landing-actions > a:last-child { font-size: 12px; }
+.landing-hero small { display: block; font-size: 10px; color: #818873; line-height: 1.7; margin-top: 20px; }
+.landing-scene { background: #e9ecdf; border-radius: 140px 140px 12px 12px; padding: 40px 0 20px; position: relative; min-width: 0; }
+.landing-scene > svg { width: 100%; display: block; }
+.landing-scene > span { display: block; text-align: center; font-size: 8px; color: #637452; letter-spacing: 2px; }
+.scene-card { position: absolute; display: flex; align-items: center; gap: 12px; background: #fffef8; padding: 15px 17px; border: 1px solid #d6dcc9; border-radius: 9px; box-shadow: 0 8px 28px #364a2910; }
+.scene-card strong { font-size: 11px; display: block; }
+.scene-card small { font-size: 9px; margin-top: 5px; }
+.scene-visitor { top: 110px; left: -23px; }
+.scene-community { bottom: 69px; right: -12px; }
+.scene-card b { background: #e7eedc; color: #527342; border-radius: 50%; padding: 4px 7px; font-size: 11px; }
+.landing-scene > p { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px !important; margin: 0 auto; }
+.landing-strip { padding: 26px 40px; border-top: 1px solid #dedfd0; border-bottom: 1px solid #dedfd0; display: flex; justify-content: center; gap: 80px; color: #7a826c; font-size: 12px; }
+.landing-section { padding: 85px 48px; max-width: 1320px; margin: auto; scroll-margin-top: 20px; }
+.landing h2 { font-size: clamp(29px, 3.4vw, 43px); line-height: 1.2; letter-spacing: -1.4px; font-weight: 550; margin: 18px 0 14px; }
+.landing-section > p { color: #7a806f; font-size: 14px; line-height: 1.7; }
+.landing-features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 42px; }
+.landing-features article { background: #fcfcf6; border: 1px solid #dfe2d3; border-radius: 9px; padding: 26px 23px; }
+.landing-feature-icon { display: inline-flex; padding: 12px; background: #eaf0e0; color: #3b6142; border-radius: 9px; }
+.landing-features article:nth-child(even) .landing-feature-icon { background: #f1e2d4; color: #a75d36; }
+.landing h3 { font-size: 17px; letter-spacing: -.3px; font-weight: 600; margin: 23px 0 12px; }
+.landing-features p, .landing-role-grid p, .landing-step-grid p { font-size: 13px; line-height: 1.85; color: #78816b; margin: 0; }
+.landing-roles { background: #213d2e; color: #f6f4e9; padding: 68px max(48px, calc((100vw - 1224px) / 2)); }
+.landing-roles .landing-eyebrow { color: #b3c2a4; }
+.landing-roles > p { color: #a9bba2; font-size: 14px; }
+.landing-role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 44px; }
+.landing-role-grid article { border-top: 1px solid #657d61; padding-top: 23px; }
+.landing-role-grid article > span { font-size: 9px; letter-spacing: 1.5px; color: #b9c6ad; }
+.landing-role-grid h3 { font-size: 21px; line-height: 1.35; }
+.landing-role-grid p { color: #b3c0a9; }
+.landing-step-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; margin-top: 38px; }
+.landing-step-grid article > span { font-family: Georgia, serif; font-size: 35px; color: #b07752; }
+.landing-final { margin: 0 48px 75px; padding: 55px 20px; text-align: center; background: #e9ecde; border-radius: 12px; color: #33513b; }
+.landing-final p { font-size: 14px; color: #76816a; margin-bottom: 26px; }
+.landing-footer { padding: 28px 48px; border-top: 1px solid #dce0cf; display: flex; align-items: center; gap: 25px; font-size: 11px; color: #7c8671; }
+.landing-footer .yardly-brand { font-size: 21px; }
+.landing-footer p { flex: 1; }
+@media(max-width: 950px) { .landing-header, .landing-hero, .landing-section { padding-left: 25px; padding-right: 25px; } .landing-hero { gap: 30px; } .landing-actions { flex-wrap: wrap; gap: 18px; } .landing-features { grid-template-columns: 1fr 1fr; } .landing-strip { gap: 30px; } .scene-visitor { left: -10px; padding: 12px; } .scene-community { right: -10px; padding: 12px; } .landing-roles { padding-left: 25px; padding-right: 25px; } }
+@media(max-width: 650px) { .landing-header { height: 80px; padding: 0 20px; } .landing-header nav { display: none; } .landing-header .yardly-brand { font-size: 23px; } .landing-header .yardly-brand svg { width: 35px; } .landing-login { padding: 10px 12px; font-size: 11px; } .landing-hero { grid-template-columns: 1fr; padding: 35px 23px 45px; gap: 36px; } .landing-hero h1 { font-size: 57px; letter-spacing: -2.8px; } .landing-hero > div > p { font-size: 15px; } .landing-scene { margin: 0 8px; } .landing-scene > span { font-size: 7px; } .scene-card { padding: 12px; gap: 8px; } .scene-visitor { top: 85px; left: -15px; } .scene-community { right: -15px; bottom: 55px; } .scene-card strong { font-size: 10px; } .scene-card small { font-size: 8px; } .landing-strip { padding: 22px; flex-wrap: wrap; gap: 13px; font-size: 10px; } .landing-section { padding: 50px 23px; } .landing-features { gap: 12px; margin-top: 30px; } .landing-features article { padding: 20px 15px; } .landing h3 { font-size: 15px; } .landing-features p { font-size: 12px; } .landing-roles { padding: 45px 23px; } .landing-role-grid, .landing-step-grid { grid-template-columns: 1fr; gap: 28px; } .landing-role-grid h3 { margin-top: 16px; } .landing-step-grid h3 { margin-top: 12px; font-size: 18px; } .landing-final { margin: 0 18px 45px; padding: 42px 18px; } .landing-footer { padding: 25px 23px; flex-wrap: wrap; gap: 15px; } .landing-footer p { flex-basis: 55%; } }

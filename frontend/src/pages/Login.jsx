@@ -48,6 +48,7 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+        <p style={{ textAlign: 'right', fontSize: 13 }}><Link to="/forgot-password">Forgot password?</Link></p>
         {error && <p className="error-text">{error}</p>}
         <button className="btn btn-primary" type="submit" disabled={submitting}>
           {submitting ? 'Logging in…' : 'Log In'}

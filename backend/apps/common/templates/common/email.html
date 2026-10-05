@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{{ title }}</title></head>
+<body style="margin:0;background:#f4f3ee;font-family:Arial,sans-serif;color:#193c2e">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:40px 16px">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:white;border:1px solid #dedfd8;border-radius:16px;overflow:hidden">
+<tr><td style="background:#193c2e;padding:28px 32px;color:white;font-size:28px;font-weight:bold">Yardly<span style="color:#dbb88f;font-size:13px;display:block;margin-top:8px;font-weight:normal">Your neighbourhood, a little closer.</span></td></tr>
+<tr><td style="padding:36px 32px"><p style="font-size:11px;letter-spacing:2px;color:#967044">{{ eyebrow }}</p><h1 style="font-size:30px;line-height:1.2;margin:18px 0">{{ title }}</h1><p style="color:#606961;line-height:1.7">{{ description }}</p>
+{% if code %}<div style="padding:22px;background:#f4f3ee;border:1px solid #e1e3da;border-radius:10px;text-align:center;font-size:36px;letter-spacing:8px;font-weight:bold">{{ code }}</div>{% endif %}
+<p style="color:#606961;line-height:1.7;margin:24px 0">{{ content }}</p>
+{% if button_url %}<a href="{{ button_url }}" style="display:inline-block;background:#193c2e;color:white;text-decoration:none;padding:15px 24px;border-radius:8px;font-weight:bold">{{ button_label }}</a>{% endif %}
+<p style="font-size:13px;color:#7b837c;line-height:1.6;margin-top:30px">{{ footer }}</p></td></tr>
+<tr><td style="border-top:1px solid #ebede6;padding:20px 32px;font-size:12px;color:#7b837c">The Yardly team · Community starts at home.</td></tr>
+</table></td></tr></table></body></html>

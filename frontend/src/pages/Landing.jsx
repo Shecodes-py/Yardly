@@ -1,23 +1,27 @@
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { Brand } from '../components/ResidentLayout'
+import Icon from '../components/Icon'
+import './Landing.css'
 
+const features = [
+  ['visitors', 'A warmer welcome.', 'Invite visitors and register expected deliveries, so your gate team knows who is coming.'],
+  ['notice', 'Stay in the know.', 'Find estate announcements, local updates and conversations with your neighbours in one place.'],
+  ['wrench', 'Get things sorted.', 'Report maintenance issues, track requests and find businesses and people nearby to help.'],
+  ['payments', 'Keep estate life organised.', 'See estate levies, due dates and recorded receipts without losing track of the details.'],
+]
 export default function Landing() {
-  const { user, loading } = useAuth()
-
-  if (!loading && user) return <Navigate to="/home" replace />
-
-  return (
-    <div className="center-page">
-      <h1 style={{ color: 'var(--color-primary)' }}>Yardly</h1>
-      <p style={{ fontSize: 18, marginBottom: 32 }}>
-        Get things done by trusted people in your community.
-      </p>
-      <Link to="/register" className="btn btn-primary" style={{ marginBottom: 12 }}>
-        Get Started
-      </Link>
-      <Link to="/login" className="btn btn-secondary">
-        I already have an account
-      </Link>
-    </div>
-  )
+  const { user } = useAuth()
+  return <div className="landing">
+    <header className="landing-header"><Link to="/" aria-label="Yardly home"><Brand /></Link><nav aria-label="Website navigation"><a href="#life">Estate life</a><a href="#everyone">Who it’s for</a><a href="#start">How it works</a></nav><Link className="landing-login" to={user ? '/dashboard' : '/login'}>{user ? 'My dashboard' : 'Sign in'}<Icon name="arrow" size={16} /></Link></header>
+    <main>
+      <section className="landing-hero"><div><span className="landing-eyebrow">A LITTLE CLOSER TO HOME</span><h1>Your estate.<br />Your people.<br /><em>All together.</em></h1><p>From welcoming visitors to finding a helping hand, Yardly brings everyday estate life into one simple place.</p><div className="landing-actions"><Link className="landing-cta" to={user ? '/dashboard' : '/register'}>{user ? 'Open your dashboard' : 'Join your neighbourhood'}<Icon name="arrow" size={18} /></Link><a href="#start">See how it works ↘</a></div><small>Made for residential estates. Join with your estate’s invite code.</small></div>
+      <div className="landing-scene"><span>EVERYDAY LIFE, A LITTLE EASIER</span><svg viewBox="0 0 620 480" aria-label="Illustration of a residential neighbourhood"><circle cx="385" cy="151" r="113" fill="#eee3c4"/><path d="M70 414V251l95-82 95 82v163" fill="#f5f0e4" stroke="#bfc3b3" strokeWidth="2"/><path d="M55 255l110-97 111 97" stroke="#2b503c" strokeWidth="15" fill="none"/><path d="M138 414V307h56v107" fill="#b45b36"/><path d="M89 273h29v45H89zM212 273h29v45h-29z" fill="#9aaea0"/><path d="M280 414V215h184v199" fill="#e0e3d5" stroke="#a5ad98" strokeWidth="2"/><path d="M266 216h212" stroke="#294a36" strokeWidth="14"/><path d="M311 243h40v51h-40zM394 243h40v51h-40zM309 326h42v51h-42z" fill="#89a194"/><path d="M392 414v-89h44v89" fill="#31513e"/><path d="M516 414V242M40 414v-75" stroke="#9f8460" strokeWidth="9"/><ellipse cx="516" cy="229" rx="44" ry="67" fill="#617a58"/><ellipse cx="40" cy="319" rx="25" ry="38" fill="#8c9b70"/><path d="M5 424h580" stroke="#91a07c" strokeWidth="17"/><path d="M154 425l-52 55h167l-80-55" fill="#e7e0cd"/></svg><div className="scene-card scene-visitor"><Icon name="visitors" size={26} /><div><strong>Expecting company?</strong><small>Your gate team is in the loop.</small></div><b>✓</b></div><div className="scene-card scene-community"><Icon name="chat" size={26} /><div><strong>Good neighbours. Great connections.</strong><small>There’s a whole community around you.</small></div></div><p><Icon name="pin" size={16} />A place to belong.</p></div></section>
+      <div className="landing-strip"><span>Less running around.</span><span>More peace of mind.</span><span>A neighbourhood that feels like home.</span></div>
+      <section id="life" className="landing-section"><span className="landing-eyebrow">THE EVERYDAY, TAKEN CARE OF</span><h2>Life happens around you.<br />Keep it all within reach.</h2><p>One familiar place for the things that make your estate work.</p><div className="landing-features">{features.map(([icon,title,text]) => <article key={title}><span className="landing-feature-icon"><Icon name={icon} size={27} /></span><h3>{title}</h3><p>{text}</p></article>)}</div></section>
+      <section id="everyone" className="landing-roles"><span className="landing-eyebrow">A PLACE FOR EVERYONE</span><h2>One estate. A connected team.</h2><p>Different responsibilities, the same neighbourhood.</p><div className="landing-role-grid">{[['RESIDENTS','Make yourself at home.','Manage visitors, find local help, follow estate updates and keep up with dues from your personal dashboard.'],['ESTATE MANAGEMENT','Keep your community running.','Review membership requests, share announcements, manage maintenance and keep estate records organised.'],['GATE SECURITY','A clearer view at the gate.','Look up visitor passes, check arrivals, coordinate deliveries and see security alerts from your estate.']].map(([role,title,text],i) => <article key={role}><span>0{i+1} / {role}</span><h3>{title}</h3><p>{text}</p></article>)}</div></section>
+      <section id="start" className="landing-section"><span className="landing-eyebrow">START WITH YOUR NEIGHBOURHOOD</span><h2>A few steps. A little closer.</h2><div className="landing-step-grid">{[['Get your estate invite','Ask your estate management for the invite code for your neighbourhood.'],['Make yourself known','Create your account and complete your household details. Your estate team reviews your membership.'],['Settle into estate life','Once approved, invite visitors, share updates and find help close to home.']].map(([title,text],i) => <article key={title}><span>0{i+1}</span><h3>{title}</h3><p>{text}</p></article>)}</div></section>
+      <section className="landing-final"><Icon name="leaf" size={35} /><h2>A better neighbourhood<br />starts with connection.</h2><p>Your everyday estate life, a little easier.</p><Link className="landing-cta" to={user ? '/dashboard' : '/register'}>{user ? 'Open your dashboard' : 'Join your neighbourhood'}<Icon name="arrow" size={18} /></Link></section>
+    </main><footer className="landing-footer"><Brand /><p>Your neighbourhood, a little closer.</p><Link to="/login">Sign in</Link><span>© {new Date().getFullYear()} Yardly</span></footer>
+  </div>
 }

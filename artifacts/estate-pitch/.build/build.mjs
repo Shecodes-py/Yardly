@@ -1,0 +1,55 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
+const root='C:/Users/user/Documents/Peace/Yardly/artifacts/estate-pitch';
+const skill='C:/Users/user/.codex/plugins/cache/openai-primary-runtime/presentations/26.905.11957/skills/presentations';
+const {resolvePresentationFont,finalizePresentation}=await import(pathToFileURL(skill+'/container_tools/artifact_tool_utils.mjs'));
+const font=resolvePresentationFont();
+const p=Presentation.create({slideSize:{width:1280,height:720}});
+const green='#1D3F30', cream='#F6F5EE', muted='#56665C', rust='#A45432';
+function text(s,str,x,y,w,h,size=26,color=green,bold=false){let a=s.shapes.add({geometry:'textbox',position:{left:x,top:y,width:w,height:h},fill:'none',line:{fill:'none',width:0}});a.text=str;a.text.style={typeface:font,fontSize:size,color,bold,autoFit:'none'};return a;}
+function slide(n,title,dark=false){let s=p.slides.add();s.background.fill=dark?green:cream;text(s,'YARDLY  /  ESTATE PILOT PROPOSAL',56,30,1000,28,16,dark?'#CEDACB':muted);text(s,title,56,78,1168,110,46,dark?cream:green,true);text(s,String(n).padStart(2,'0'),1170,670,54,24,16,dark?cream:muted);s.speakerNotes.textFrame.setText('Proposal prepared 6 October 2026. Screenshots captured from https://yardly-alpha.vercel.app/ on 6 October 2026. Dashboard views use existing test accounts; all displayed counts and payment amounts are test data, not evidence of adoption or revenue. Proposed pilot scope and outcomes require agreement with estate management.');return s;}
+async function pic(s,name,x,y,w,h){s.images.add({blob:new Uint8Array(await fs.readFile(root+'/.build/'+name+'.jpg')),contentType:'image/jpeg',alt:'Live Yardly '+name+' screenshot',fit:'contain',position:{left:x,top:y,width:w,height:h}});}
+let s=slide(1,'Estate life, a little easier.',true);
+text(s,'A shared home for residents,\nmanagement and gate security.',56,209,410,140,33,cream);
+text(s,'Investment proposal:\nfund a focused estate pilot.',56,440,405,100,26,'#D5E1D0');
+await pic(s,'landing',493,198,731,457);
+text(s,'Live product • yardly-alpha.vercel.app',56,636,420,28,17,'#D5E1D0');
+s=slide(2,'Make everyday estate work easier to follow.');
+const rows=[['Resident records','Know which household belongs to each unit.'],['Dues & receipts','Make payment status easier to verify and explain.'],['Visitors & deliveries','Give the gate a clearer invitation and arrival process.'],['Notices & repairs','Keep updates visible and give issues a clear owner.']];
+rows.forEach((r,i)=>{text(s,String(i+1).padStart(2,'0'),56,216+i*102,65,50,28,rust,true);text(s,r[0],137,212+i*102,360,50,30,green,true);text(s,r[1],525,214+i*102,670,70,26,muted);});
+text(s,'These are the workflows the pilot will validate with your estate team.',137,641,1040,30,19,muted);
+s=slide(3,'One front door for residents.');
+await pic(s,'resident',56,192,868,488);await pic(s,'mobile',981,180,222,480);
+text(s,'Visitors • deliveries • estate notices • dues • issue reporting',56,156,870,35,23,muted);
+text(s,'Current product using a test account. Desktop and mobile views.',56,682,1000,23,16,muted);
+s=slide(4,'Give management a shared operating view.');
+await pic(s,'admin',56,200,835,470);
+text(s,'CURRENT PRODUCT',932,200,292,35,18,rust,true);
+text(s,'Review membership\nrequests',932,253,292,80,28,green,true);
+text(s,'Publish estate\nannouncements',932,361,292,80,28,green,true);
+text(s,'Review tickets, dues\nand access codes',932,469,292,110,28,green,true);
+text(s,'Test account and sample records; figures are not operating results.',56,680,1060,24,16,muted);
+s=slide(5,'Fund the foundation for a dependable pilot.');
+text(s,'ALREADY IN THE PRODUCT',56,207,520,34,20,rust,true);
+text(s,'Role-based dashboards\nResident approval workflow\nVisitor invitation forms\nEstate notices and maintenance requests',56,267,534,247,29,green);
+text(s,'PROPOSED INVESTMENT SCOPE',666,207,558,34,20,rust,true);
+text(s,'Structured property and unit records\nVerified dues, reconciliation and receipts\nTargeted notices and tracked issue updates\nHosting, monitoring and staff onboarding',666,267,558,247,29,green);
+text(s,'Online payment collection is not yet integrated. Final scope and budget will be agreed before rollout.',56,580,1145,78,23,muted);
+s.speakerNotes.textFrame.setText('Current product has levy display and recorded receipt foundations; do not present this as a completed financial ledger or online checkout. Investment scope is proposed work, not shipped functionality. Agree priorities, access permissions, data retention, support and acceptance criteria with management before rollout.');
+s=slide(6,'Start small. Measure before expanding.');
+const phases=[['01 / AGREE','Choose a pilot group.\nConfirm workflows, budget\nand responsible staff.'],['02 / OPERATE','Onboard households.\nTrain management and security.\nRun real daily workflows.'],['03 / REVIEW','Compare against the baseline.\nResolve issues.\nDecide whether to expand.']];
+phases.forEach((r,i)=>{text(s,r[0],56+i*401,224,365,42,23,rust,true);text(s,r[1],56+i*401,288,365,190,28,green);});
+text(s,'Measure: resident participation, gate verification time, payment reconciliation time\nand issue resolution time. Benefits must be demonstrated during the pilot.',56,539,1164,105,26,muted);
+s=slide(7,'Let’s make your estate the pilot.',true);
+text(s,'The decision we’re asking for',56,227,1080,55,33,cream,true);
+text(s,'Commit funding for an agreed pilot scope.\nNominate a management lead and a security lead.\nApprove household onboarding and success criteria.',56,311,1150,191,31,cream);
+text(s,'Next step: a scoping meeting and a costed pilot proposal.',56,551,1140,70,28,'#D5E1D0');
+text(s,'Explore the live site: yardly-alpha.vercel.app',56,632,1110,34,23,'#D5E1D0');
+const candidate=root+'/.build/candidate.pptx', final=root+'/output/Yardly-Estate-Pilot.pptx';
+await (await PresentationFile.exportPptx(p)).save(candidate);
+await finalizePresentation({workspaceDir:root,candidatePath:candidate,finalPath:final,pythonExecutable:'C:/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe',integrityValidatorPath:skill+'/container_tools/inspect_presentation_package_integrity.py',layoutValidatorPath:skill+'/container_tools/inspect_presentation_layout_geometry.py',layoutArgs:['--expected-slide-size-emu','12192000,6858000','--validate-bullet-geometry','--validate-heading-fit'],fontPolicy:{basis:'design',families:[font]},verifyArtifactToolImport:true,receiptPath:root+'/.build/validation.json',requiredNativeTableOwnerSlides:[]});
+const finalDeck=await PresentationFile.importPptx(await FileBlob.load(final));
+for(let i=0;i<finalDeck.slides.items.length;i++){const png=await finalDeck.export({slide:finalDeck.slides.items[i],format:'png',scale:1});await fs.writeFile(root+'/output/slide-'+(i+1)+'.png',new Uint8Array(await png.arrayBuffer()));}
+console.log(final);

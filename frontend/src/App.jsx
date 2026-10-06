@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
+import OnboardingGuide from './components/OnboardingGuide'
 import { Analytics } from '@vercel/analytics/react'
 
 function analyticsBeforeSend(event) {
@@ -51,6 +52,7 @@ function App() {
     <BrowserRouter>
       {import.meta.env.PROD && <Analytics beforeSend={analyticsBeforeSend} />}
       <AuthProvider>
+        <OnboardingGuide />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
